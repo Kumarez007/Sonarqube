@@ -30,12 +30,23 @@ stages:
       vmImage: $(vmImageName)
 
     steps:
+    steps:
+- task: SonarQubePrepare
+  inputs:
+    SonarQube: 'sonarqubepocunicef'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'SonarqubeAzureDevOpsInt_SonarqubeAzureDevOpsInt_AYyvIcvfO87iiNDg0ZZt'
+    cliProjectName: 'SonarqubeAzureDevOpsInt'
+    cliSources: 'src'
+ 
+- task: SonarQubeAnalyze
     - task: Maven@3
       displayName: 'Maven Package'
       inputs:
         mavenPomFile: 'pom.xml'
 
-    - task: CopyFiles@2
+    - task: SonarQubePublish
       displayName: 'Copy Files to artifact staging directory'
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
